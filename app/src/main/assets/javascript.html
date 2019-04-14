@@ -2,10 +2,10 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Carson</title>
+    <title>Test</title>
     <script>
-    // JS代码
-    // Android需要调用的方法
+    /*JS代码*/
+    /*Android需要调用的方法*/
     function callJS(){
         alert("Android调用了JS的callJS方法");
     }
@@ -25,10 +25,29 @@
         alert("result is" + result);
     }
 
+    function copyText(){
+        document.getElementById("field2").value=document.getElementById("field1").value;
+    }
+
+
+
     </script>
 </head>
 <body>
-//点击按钮则调用callAndroid函数
-<button type="button" id="button1" content="1234" onclick="callAndroid()"></button>
+<h1>This is heading 1</h1>
+
+/*点击按钮则调用callAndroid函数*/
+<button type="button" id="button1" onclick="callAndroid()">callAndroid()函数</button>
+
+<p>当按钮被单击时触发函数。JS调用AndroidtoJs.hello()函数。</p>
+
+
+Field1: <input type="text" id="field1" value="Hello World!"><br>
+Field2: <input type="text" id="field2"><br><br>
+
+<button onclick="copyText()">复制文本</button>
+
+<p>当按钮被单击时触发函数。此函数把文本从 Field1 复制到 Field2 中。</p>
+
 </body>
 </html>
