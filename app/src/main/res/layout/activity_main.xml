@@ -1,104 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context="com.example.carson_ho.webview_demo.MainActivity">
-
-
-    <!-- 获取网站的标题-->
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""/>
-
-    <!--开始加载提示-->
-    <TextView
-        android:id="@+id/text_beginLoading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/title"
-        android:text=""/>
-
-    <!--获取加载进度-->
-    <TextView
-        android:id="@+id/text_Loading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/text_beginLoading"
-        android:text=""/>
-
-    <!--结束加载提示-->
-    <TextView
-        android:id="@+id/text_endLoading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/text_Loading"
-        android:text=""/>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.example.carson_ho.webview_demo.MainActivity">
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btn_1"
+        <!-- 获取网站的标题-->
+        <TextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onClick"
-            android:text="btn1"
-            android:textAllCaps="false"/>
+            android:text=""/>
 
-        <Button
-            android:id="@+id/btn_2"
+        <!--开始加载提示-->
+        <TextView
+            android:id="@+id/text_beginLoading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onClick"
-            android:text="btn2"
-            android:textAllCaps="false"/>
+            android:layout_below="@+id/title"
+            android:text=""/>
 
-        <Button
-            android:id="@+id/btn_3"
+        <!--获取加载进度-->
+        <TextView
+            android:id="@+id/text_Loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onClick"
-            android:text="btn3"
-            android:textAllCaps="false"/>
+            android:layout_below="@+id/text_beginLoading"
+            android:text=""/>
 
-        <Button
-            android:id="@+id/btn_4"
+        <!--结束加载提示-->
+        <TextView
+            android:id="@+id/text_endLoading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onClick"
-            android:text="btn4"
-            android:textAllCaps="false"/>
+            android:layout_below="@+id/text_Loading"
+            android:text=""/>
 
-        <Button
-            android:id="@+id/btn_5"
-            android:layout_width="wrap_content"
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onClick"
-            android:text="btn5"
-            android:textAllCaps="false"/>
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onClick"
+                android:text="btn1"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/btn_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onClick"
+                android:text="btn2"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/btn_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onClick"
+                android:text="btn3"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/btn_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onClick"
+                android:text="btn4"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/btn_5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onClick"
+                android:text="btn5"
+                android:textAllCaps="false"/>
 
 
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#000"
+            android:padding="1dp"/>
+
+        <!--显示网页区域-->
+        <WebView
+            android:id="@+id/webView1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@+id/text_endLoading"
+            android:layout_marginTop="10dp"/>
     </LinearLayout>
 
-    <TextView
+    <ViewStub
+        android:id="@+id/view_stub_ping_lun"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#000"
-        android:padding="1dp"/>
-
-    <!--显示网页区域-->
-    <WebView
-        android:id="@+id/webView1"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@+id/text_endLoading"
-        android:layout_marginTop="10dp"/>
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout="@layout/layout_input_text_dialog"
+        />
+</RelativeLayout>

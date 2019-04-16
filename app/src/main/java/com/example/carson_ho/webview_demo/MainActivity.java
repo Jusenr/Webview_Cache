@@ -1,22 +1,31 @@
 package com.example.carson_ho.webview_demo;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -25,10 +34,33 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Set;
 
+import static android.view.View.GONE;
+
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    public static final String TAG = "MainActivity";
+    /**
+     * 填充品论框
+     */
+    private ViewStub viewStubPinlun;
+    /***
+     * 是否填充 评论看布局
+     */
+    private boolean isInflated;
+    /**
+     * 填充 评论看布局
+     */
+    private View inflatedStub;
+    /**
+     * 评论输入框
+     */
+    private EditText inPutPinglun;
+
+    private Animation mShowAction;
+    private Animation mHiddenAction;
+
     WebView mWebview;
-    TextView beginLoading, endLoading, loading, mtitle;
+    TextView beginLoading, endLoading, loading, mtitle, btn_cancel, btn_send;
 
     @SuppressLint("JavascriptInterface")
     @Override
@@ -36,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        viewStubPinlun = (ViewStub) findViewById(R.id.view_stub_ping_lun);
 
         mWebview = (WebView) findViewById(R.id.webView1);
         beginLoading = (TextView) findViewById(R.id.text_beginLoading);
@@ -144,7 +177,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         HashMap<String, String> params = new HashMap<>();
                         Set<String> collection = uri.getQueryParameterNames();
 
-                        showInputText();
+//                        showInputText();
+
+                        mWebview.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                String params = "{\"content\":\"120c83f7606f9a1e58f\",\"deviceType\":\"android\",\"hint\":\"请输入\"}";
+                                String js1 = "javascript:returnResult(#result#)";
+                                showInputWindow(params, js1);
+                            }
+                        });
                     }
 
                     return true;
@@ -241,7 +283,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 showInputText();
                 break;
             case R.id.btn_3:
-
+                String params = "{\"content\":\"120c83f7606f9a1e58f\",\"deviceType\":\"android\",\"hint\":\"请输入\"}";
+                String js1 = "javascript:returnResult(#result#)";
+                showInputWindow(params, js1);
                 break;
             case R.id.btn_4:
 
@@ -259,6 +303,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mWebview.goBack();
             return true;
         }
+        // 处理 弹出框输入布局
+        if (inPutPinglun != null && inPutPinglun.getVisibility() == View.VISIBLE) {
+            inPutPinglun.setVisibility(View.GONE);
+            viewStubPinlun.setVisibility(View.GONE);
+            return true;
+        }
+
 
         return super.onKeyDown(keyCode, event);
     }
@@ -275,5 +326,123 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mWebview = null;
         }
         super.onDestroy();
+    }
+
+
+    public void showInputWindow(String param, final String callBack) {
+        if (!isInflated) {
+            inflatedStub = viewStubPinlun.inflate();
+            isInflated = true;
+            btn_cancel = (TextView) inflatedStub.findViewById(R.id.tv_cancel);
+            btn_send = (TextView) inflatedStub.findViewById(R.id.tv_send);
+            inPutPinglun = (EditText) inflatedStub.findViewById(R.id.edit_text);
+            // 发送
+//            inPutPinglun.setImeOptions(EditorInfo.IME_ACTION_SEND);
+            inPutPinglun.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+            //水平滚动设置为False
+            inPutPinglun.setHorizontallyScrolling(false);
+            inPutPinglun.setMinLines(4);
+            initAnimations_One();
+//            initAnimations_Two();
+//            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//            inPutPinglun.setLayoutParams(params);
+        }
+        if (inflatedStub.getVisibility() == GONE) {
+            inflatedStub.setVisibility(View.VISIBLE);
+            inPutPinglun.setVisibility(View.VISIBLE);
+        }
+        try {
+            JSONObject object = new JSONObject(param);
+            Log.i(TAG, "showInputWindow: " + param);
+            inPutPinglun.setHint(object.optString("hint"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        inPutPinglun.requestFocus();
+        final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(inPutPinglun, InputMethodManager.SHOW_FORCED);
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                JSONObject jsonObject = new JSONObject();
+//                try {
+//                    jsonObject.put("message", inPutPinglun.getText().toString().trim());
+//                    jsonObject.put("result", false);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+////                String json = UrlUtil.getFormatJs(callBack, jsonObject.toString());
+//                String s = jsonObject.toString();
+//                Log.i("InputText", "text: " + s);
+//                mWebview.loadUrl("javascript:returnResult(" + s + ")");
+                inflatedStub.setVisibility(GONE);
+                inPutPinglun.setVisibility(GONE);
+                inPutPinglun.setText(null);
+                inPutPinglun.clearFocus();
+                imm.hideSoftInputFromWindow(inPutPinglun.getWindowToken(), 0); //强制隐藏键盘
+
+            }
+        });
+
+        btn_send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("message", inPutPinglun.getText().toString().trim());
+                    jsonObject.put("result", true);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+//                String json = UrlUtil.getFormatJs(callBack, jsonObject.toString());
+                String s = jsonObject.toString();
+                Log.i("InputText", "text: " + s);
+                mWebview.loadUrl("javascript:returnResult(" + s + ")");
+                inflatedStub.setVisibility(GONE);
+                inPutPinglun.setVisibility(GONE);
+                inPutPinglun.setText(null);
+                inPutPinglun.clearFocus();
+                imm.hideSoftInputFromWindow(inPutPinglun.getWindowToken(), 0); //强制隐藏键盘
+
+            }
+        });
+
+// 监听文字框
+        inPutPinglun.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                if (!TextUtils.isEmpty(s)) {
+//                    if (btn_send.getVisibility() == View.GONE) {
+//                        btn_send.setVisibility(View.VISIBLE);
+//
+//                        btn_send.startAnimation(mShowAction);
+//                    }
+//
+//
+//                } else {
+//                    btn_send.setVisibility(View.GONE);
+//                    btn_send.startAnimation(mHiddenAction);
+//
+//                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private void initAnimations_One() {
+        mShowAction = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+        mHiddenAction = AnimationUtils.loadAnimation(this, R.anim.right_out);
     }
 }

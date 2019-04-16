@@ -2,12 +2,16 @@ package com.example.carson_ho.webview_demo;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Rect;
 import android.text.TextUtils;
 import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
@@ -118,6 +122,48 @@ public class InputTextDialog {
     public void show() {
         setLayout();
         dialog.show();
+
+        showSoftInputFromWindow(edit_text);
+
     }
+
+    public void showSoftInputFromWindow(final EditText editText) {
+        //监听软键盘是否显示或隐藏
+        layout_bg.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        Rect r = new Rect();
+                        layout_bg.getWindowVisibleDisplayFrame(r);
+                        int screenHeight = layout_bg.getRootView().getHeight();
+                        int heightDifference = screenHeight - (r.bottom);
+                        if (heightDifference > 200) {
+                            //软键盘显示
+// changeKeyboardHeight(heightDifference);
+                        } else {
+                            //软键盘隐藏
+
+                        }
+                    }
+
+                });
+        editText.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                editText.setFocusable(true);
+                editText.setFocusableInTouchMode(true);
+                return false;
+            }
+
+        });
+
+        editText.setFocusable(true);
+        editText.setFocusableInTouchMode(true);
+        editText.requestFocus();
+        editText.findFocus();
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED);// 显示输入法
+    }
+
 
 }
