@@ -13,7 +13,7 @@
         android:layout_alignParentLeft="true"
         android:padding="10dp"
         android:text="@string/cancel"
-        android:textColor="#A5A5A5"
+        android:textColor="#4F4F4F"
         android:textSize="12sp"/>
 
     <TextView
@@ -23,7 +23,7 @@
         android:layout_alignParentRight="true"
         android:padding="10dp"
         android:text="@string/send"
-        android:textColor="#A5A5A5"
+        android:textColor="#4F4F4F"
         android:textSize="12sp"/>
 
     <EditText
