@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,9 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -139,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         HashMap<String, String> params = new HashMap<>();
                         Set<String> collection = uri.getQueryParameterNames();
 
+                        showInputText();
                     }
 
                     return true;
@@ -163,6 +169,60 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+
+    private void showInputText() {
+        try {
+            String params = "{\"content\":\"120c83f7606f9a1e58f\",\"deviceType\":\"android\"}";
+            if (!TextUtils.isEmpty(params)) {
+                JSONObject object = new JSONObject(params);
+                final String content = object.optString("content");
+                String confirm = object.optString("confirm");
+                String cancel = object.optString("cancel");
+            }
+
+            final JSONObject jsonObject = new JSONObject();
+            final InputTextDialog mAlertDialog = new InputTextDialog(this).builder();
+
+            mAlertDialog.setNegativeButton(getString(R.string.cancel), new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        jsonObject.put("no", "cancel");
+                        jsonObject.put("result", false);
+                        String s = jsonObject.toString();
+                        mWebview.loadUrl("javascript:returnResult(" + s + ")");
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            mAlertDialog.setPositiveButton(getString(R.string.send), new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        String text = mAlertDialog.getText();
+                        jsonObject.put("yes", "yes");
+                        jsonObject.put("result", true);
+                        jsonObject.put("content", text);
+                        String s = jsonObject.toString();
+                        Log.i("InputText", "doMethod-text: " + text);
+                        mWebview.loadUrl("javascript:returnResult(" + s + ")");
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            mAlertDialog.show();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -176,6 +236,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         mWebview.loadUrl("javascript:callJS()");
                     }
                 });
+                break;
+            case R.id.btn_2:
+                showInputText();
+                break;
+            case R.id.btn_3:
+
+                break;
+            case R.id.btn_4:
+
+                break;
+            case R.id.btn_5:
+
                 break;
         }
     }
