@@ -1,9 +1,11 @@
 package com.example.carson_ho.webview_demo;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -17,6 +19,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
@@ -62,11 +65,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     WebView mWebview;
     TextView beginLoading, endLoading, loading, mtitle, btn_cancel, btn_send;
 
+    public Activity mActivity;
+
     @SuppressLint("JavascriptInterface")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mActivity = this;
 
         viewStubPinlun = (ViewStub) findViewById(R.id.view_stub_ping_lun);
 
@@ -330,6 +337,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     public void showInputWindow(String param, final String callBack) {
+        setGlobalLayoutListener(this, inflatedStub);
         if (!isInflated) {
             inflatedStub = viewStubPinlun.inflate();
             isInflated = true;
@@ -382,6 +390,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 inPutPinglun.setText(null);
                 inPutPinglun.clearFocus();
                 imm.hideSoftInputFromWindow(inPutPinglun.getWindowToken(), 0); //强制隐藏键盘
+
+//                removeOnGlobalLayoutListener(mActivity, inflatedStub);
 
             }
         });
@@ -444,5 +454,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initAnimations_One() {
         mShowAction = AnimationUtils.loadAnimation(this, R.anim.fade_in);
         mHiddenAction = AnimationUtils.loadAnimation(this, R.anim.right_out);
+    }
+
+    /**
+     * 弹出软键盘时，view上移操作
+     *
+     * @param activity    activity
+     * @param contentView 上移view
+     */
+    public static void setGlobalLayoutListener(final Activity activity, final View contentView) {
+        View decorView = activity.getWindow().getDecorView();
+        if (contentView != null) {
+            decorView.getViewTreeObserver().addOnGlobalLayoutListener(getGlobalLayoutListener(activity, contentView));
+        }
+    }
+
+    public static void removeOnGlobalLayoutListener(final Activity activity, final View contentView) {
+        View decorView = activity.getWindow().getDecorView();
+        if (contentView != null) {
+            decorView.getViewTreeObserver().removeOnGlobalLayoutListener(getGlobalLayoutListener(activity, contentView));
+        }
+    }
+
+
+    public static ViewTreeObserver.OnGlobalLayoutListener getGlobalLayoutListener(final Activity activity, final View contentView) {
+        return new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Rect r = new Rect();
+                activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(r);
+
+                int height = activity.getResources().getDisplayMetrics().heightPixels;
+                int diff = height - r.bottom;
+
+                if (diff != 0) {
+                    if (contentView.getPaddingBottom() != diff) {
+                        contentView.setPadding(0, 0, 0, diff);
+                    }
+                } else {
+                    if (contentView.getPaddingBottom() != 0) {
+                        contentView.setPadding(0, 0, 0, 0);
+                    }
+                }
+
+                activity.getWindow().getDecorView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        };
     }
 }
