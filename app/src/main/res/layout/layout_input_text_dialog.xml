@@ -38,9 +38,7 @@
         android:background="#F5F5F5"
         android:ellipsize="end"
         android:gravity="left"
-        android:hint="请输入..."
         android:lines="4"
-        android:text="dsdsdsdddaddadada"
         android:textColor="#000"
         android:textSize="14sp"/>
 

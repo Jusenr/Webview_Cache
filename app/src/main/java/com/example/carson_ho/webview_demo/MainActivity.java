@@ -4,16 +4,15 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -295,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 showInputWindow(params, js1);
                 break;
             case R.id.btn_4:
-
+                startActivity(new Intent(this, PhotoActivity.class));
                 break;
             case R.id.btn_5:
 
@@ -373,26 +372,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                JSONObject jsonObject = new JSONObject();
-//                try {
-//                    jsonObject.put("message", inPutPinglun.getText().toString().trim());
-//                    jsonObject.put("result", false);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-////                String json = UrlUtil.getFormatJs(callBack, jsonObject.toString());
-//                String s = jsonObject.toString();
-//                Log.i("InputText", "text: " + s);
-//                mWebview.loadUrl("javascript:returnResult(" + s + ")");
                 inflatedStub.setVisibility(GONE);
                 inPutPinglun.setVisibility(GONE);
                 inPutPinglun.setText(null);
                 inPutPinglun.clearFocus();
                 imm.hideSoftInputFromWindow(inPutPinglun.getWindowToken(), 0); //强制隐藏键盘
-
-//                removeOnGlobalLayoutListener(mActivity, inflatedStub);
-
             }
         });
 
@@ -416,15 +400,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 inPutPinglun.setText(null);
                 inPutPinglun.clearFocus();
                 imm.hideSoftInputFromWindow(inPutPinglun.getWindowToken(), 0); //强制隐藏键盘
-
             }
         });
 
 // 监听文字框
-        inPutPinglun.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//        inPutPinglun.addTextChangedListener(new TextWatcher() {
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
 //                if (!TextUtils.isEmpty(s)) {
 //                    if (btn_send.getVisibility() == View.GONE) {
 //                        btn_send.setVisibility(View.VISIBLE);
@@ -438,17 +421,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                    btn_send.startAnimation(mHiddenAction);
 //
 //                }
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+//            }
+//
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//
+//            }
+//        });
     }
 
     private void initAnimations_One() {
