@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.example.carson_ho.webview_demo.MainActivity">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.example.carson_ho.webview_demo.MainActivity">
 
 
     <LinearLayout
@@ -47,12 +47,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="5">
 
             <Button
                 android:id="@+id/btn_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:onClick="onClick"
                 android:text="btn1"
                 android:textAllCaps="false"/>
@@ -61,6 +63,7 @@
                 android:id="@+id/btn_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:onClick="onClick"
                 android:text="btn2"
                 android:textAllCaps="false"/>
@@ -69,6 +72,7 @@
                 android:id="@+id/btn_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:onClick="onClick"
                 android:text="btn3"
                 android:textAllCaps="false"/>
@@ -77,6 +81,7 @@
                 android:id="@+id/btn_4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:onClick="onClick"
                 android:text="btn4"
                 android:textAllCaps="false"/>
@@ -85,6 +90,7 @@
                 android:id="@+id/btn_5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:onClick="onClick"
                 android:text="btn5"
                 android:textAllCaps="false"/>

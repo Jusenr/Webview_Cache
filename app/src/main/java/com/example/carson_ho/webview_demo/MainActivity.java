@@ -297,7 +297,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(this, PhotoActivity.class));
                 break;
             case R.id.btn_5:
-
+                startActivity(new Intent(this, TableActivity.class));
                 break;
         }
     }

@@ -67,7 +67,7 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
                 getPic();
                 break;
             case R.id.btn_3:
-
+                startActivity(new Intent(this, WebviewActivity.class));
                 break;
             case R.id.btn_4:
 
